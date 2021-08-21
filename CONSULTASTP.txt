@@ -1,0 +1,42 @@
+a. Cuántas veces contrató un servicio un cliente con DNI 24566987.
+
+SELECT  C.DNI, S.Nro_servicio "Servicios contratados"
+FROM Service S
+INNER JOIN Clientes C ON S.id_clientes = C.id_clientes
+WHERE C.DNI = 24566987
+
+
+b. Un listado de todos los modelos, colores de los autos que revisó el empleado con apellido
+Morelo.
+
+SELECT TP.Nombre, TP.Apellido, M.Nombre "Modelos", C.Nombre "Colores"
+FROM Peritajes P, Modelos M, Colores C
+INNER JOIN Automoviles A ON P.id_automoviles = A.id_automoviles AND A.id_modelo = M.id_modelo AND A.id_color = C.id_color
+INNER JOIN Personal_taller_mecanico TP ON P.id_personal_taller_mecanico = TP.id_personal_taller_mecanico
+WHERE TP.Apellido = "MORELO"
+
+
+c. El nombre del cliente y la patente del auto con el auto con más rayones.
+
+SELECT C.Nombre, C.Apellido, A.Dominio, MAX(cantidad_rayaduras)
+FROM Peritajes P, Service S
+INNER JOIN Clientes C ON S.id_clientes = C.id_clientes
+INNER JOIN Automoviles A ON S.id_automoviles = A.id_automoviles AND P.id_automoviles = A.id_automoviles
+INNER JOIN Rayaduras R ON P.id_rayaduras =  R.id_rayaduras
+
+d. El listado de insumos utilizados (cantidad, descripción y precio) para la orden de trabajo
+con id 1.
+
+SELECT P.id_peritaje "Orden id = 1", R.Cantidad, R.Nombre "Insumo", R.Costo
+FROM Taller_mecanico T, Repuestos R
+INNER JOIN Peritajes P ON P.id_taller_mecanico = T.id_taller_mecanico AND T.id_taller_mecanico = R.id_taller_mecanico
+WHERE P.id_peritaje = 1
+
+
+e. El listado de todos los autos listos para retirar que aun no hayan sido retirados.
+
+SELECT M.Nombre "Modelo auto", P.Hora_retiro_vehiculo "Vehiculo retirado" , S.Servicio_finalizado "Trabajo finalizado"
+FROM Peritajes P, Modelos M, Service S
+INNER JOIN Automoviles A ON P.id_automoviles = A.id_automoviles AND A.id_modelo = M.id_modelo AND A.id_automoviles = S.id_automoviles
+WHERE P.Hora_retiro_vehiculo = "NO RETIRADO" AND S.Servicio_finalizado = "SI"
+
